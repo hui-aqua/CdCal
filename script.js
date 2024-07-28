@@ -1,102 +1,43 @@
-const calculator = {
-    displayValue: '0',
-    firstOperand: null,
-    waitingForSecondOperand: false,
-    operator: null,
-};
+function calculateDragForce() {
+    // Retrieve input values
+    const theta = parseFloat(document.getElementById('theta').value);
+    const velocity = parseFloat(document.getElementById('velocity').value);
+    const meshL = parseFloat(document.getElementById('meshL').value);
+    const meshd = parseFloat(document.getElementById('meshd').value);
 
-function inputDigit(digit) {
-    const { displayValue, waitingForSecondOperand } = calculator;
+    // Calculate sn, cd0, and r
+    const sn = 2 * meshd / meshL;
+    const cd0 = 0.04 + Math.cos(theta * (Math.PI / 180)) * (-0.04 + sn - 1.24 * Math.pow(sn, 2) + 13.7 * Math.pow(sn, 3));
+    const r = 1 - 0.46 * cd0;
 
-    if (waitingForSecondOperand === true) {
-        calculator.displayValue = digit;
-        calculator.waitingForSecondOperand = false;
-    } else {
-        calculator.displayValue = displayValue === '0' ? digit : displayValue + digit;
-    }
+    // Display the results
+    document.getElementById('sn').value = sn.toFixed(4);
+    document.getElementById('netCd').value = cd0.toFixed(4);
+    document.getElementById('netr').value = r.toFixed(4);
+}
+function calculateDragForce() {
+    // Retrieve input values
+    const theta = parseFloat(document.getElementById('theta').value);
+    const velocity = parseFloat(document.getElementById('velocity').value);
+    const meshL = parseFloat(document.getElementById('meshL').value);
+    const meshd = parseFloat(document.getElementById('meshd').value);
+
+    // Calculate sn, cd0, and r
+    const sn = 2 * meshd / meshL;
+    const cd0 = 0.04 + Math.cos(theta * (Math.PI / 180)) * (-0.04 + sn - 1.24 * Math.pow(sn, 2) + 13.7 * Math.pow(sn, 3));
+    const r = 1 - 0.46 * cd0;
+
+    // Display the results
+    document.getElementById('sn').value = sn.toFixed(4);
+    document.getElementById('netCd').value = cd0.toFixed(4);
+    document.getElementById('netr').value = r.toFixed(4);
 }
 
-function inputDecimal(dot) {
-    if (calculator.waitingForSecondOperand === true) return;
-
-    if (!calculator.displayValue.includes(dot)) {
-        calculator.displayValue += dot;
-    }
-}
-
-function handleOperator(nextOperator) {
-    const { firstOperand, displayValue, operator } = calculator;
-    const inputValue = parseFloat(displayValue);
-
-    if (operator && calculator.waitingForSecondOperand)  {
-        calculator.operator = nextOperator;
-        return;
-    }
-
-    if (firstOperand == null && !isNaN(inputValue)) {
-        calculator.firstOperand = inputValue;
-    } else if (operator) {
-        const result = performCalculation[operator](firstOperand, inputValue);
-
-        calculator.displayValue = String(result);
-        calculator.firstOperand = result;
-    }
-
-    calculator.waitingForSecondOperand = true;
-    calculator.operator = nextOperator;
-}
-
-const performCalculation = {
-    '/': (firstOperand, secondOperand) => firstOperand / secondOperand,
-
-    '*': (firstOperand, secondOperand) => firstOperand * secondOperand,
-
-    '+': (firstOperand, secondOperand) => firstOperand + secondOperand,
-
-    '-': (firstOperand, secondOperand) => firstOperand - secondOperand,
-
-    '=': (firstOperand, secondOperand) => secondOperand
-};
-
-function resetCalculator() {
-    calculator.displayValue = '0';
-    calculator.firstOperand = null;
-    calculator.waitingForSecondOperand = false;
-    calculator.operator = null;
-}
-
-function updateDisplay() {
-    const display = document.querySelector('.calculator-screen');
-    display.value = calculator.displayValue;
-}
-
-updateDisplay();
-
-const keys = document.querySelector('.calculator-keys');
-keys.addEventListener('click', (event) => {
-    const { target } = event;
-    if (!target.matches('button')) {
-        return;
-    }
-
-    if (target.classList.contains('operator')) {
-        handleOperator(target.value);
-        updateDisplay();
-        return;
-    }
-
-    if (target.classList.contains('decimal')) {
-        inputDecimal(target.value);
-        updateDisplay();
-        return;
-    }
-
-    if (target.classList.contains('all-clear')) {
-        resetCalculator();
-        updateDisplay();
-        return;
-    }
-
-    inputDigit(target.value);
-    updateDisplay();
+// Add event listeners to input fields to trigger calculation on Enter key
+document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            calculateDragForce();
+        }
+    });
 });
