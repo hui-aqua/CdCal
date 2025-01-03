@@ -3,46 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Drag Equation Calculator</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Cloth Simulation</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="calculator">
-            <h2>Drag Equation Calculator</h2>
-            <div class="input-group">
-                <label for="theta">Flow angle [/deg]</label>
-                <input type="number" id="theta" value="0">
-            </div>
-            <div class="input-group">
-                <label for="velocity">Velocity [m/s]</label>
-                <input type="number" id="velocity" value="1">
-            </div>
-            <div class="input-group">
-                <label for="meshL">Half-mesh length [mm]</label>
-                <input type="number" id="meshL" value="20">
-            </div>
-            <div class="input-group">
-                <label for="meshd">Twine diameter [mm]</label>
-                <input type="number" id="meshd" value="3">
-            </div>
-            <div class="input-group">
-                <label for="netCd">Cd0</label>
-                <input type="number" id="netCd" readonly>
-            </div>
-            <div class="input-group">
-                <label for="sn">Solidity</label>
-                <input type="number" id="sn" readonly>
-            </div>
-            <div class="input-group">
-                <label for="netr">Current reduction factor</label>
-                <input type="number" id="netr" readonly>
-            </div>
-            <button onclick="calculateDragForce()">Calculate</button>
-        </div>
-    </div>
-    <script src="script.js">
-        
-    </script>
+    <canvas id="clothCanvas"></canvas>
+    <script src="clothSimulation.js"></script>
 </body>
 </html>
